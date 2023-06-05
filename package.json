@@ -1,0 +1,17 @@
+{
+  "name": "random",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "randomize": "node scripts/random.js",
+    "include-gen9-moves": "node scripts/gen9-moves.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nthline": "^1.0.2"
+  }
+}
