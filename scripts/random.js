@@ -13,6 +13,7 @@ async function main() {
         moves: buildPath('moves.txt'),
         abilities: buildPath('abilities.txt'),
         encounters: buildPath('encounters.txt'),
+        tms: buildPath('tm.txt'),
         tariners: buildPath('trainers.txt'),
         items: buildPath('items.txt')
     }
@@ -63,7 +64,29 @@ async function main() {
                 resolve()
             })
         })
-    }  
+    }
+
+    async function randomizeTms() {
+        return await new Promise(function(resolve) {
+        
+            fs.readFile(filePaths.tms, 'utf-8', async function(err, data) {
+                let lines = await data.split('\n');
+                let regExp = /\[([^)]+)\]/;
+                for (let index = 0; index < lines.length; index++) {
+                    let reducedLine = regExp.exec(lines[index]);
+                    let values = reducedLine.split(',');
+                    if (values.length == 1) { // LA LINEA CORRESPONDE A UN ATAQUE
+                        
+                    } else {
+                        
+                    }
+                }
+                const resultFile = await lines.join('\n')        
+                fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
+                resolve()
+            })
+        })
+    }    
     
     await randomizePokemon();
     /*
