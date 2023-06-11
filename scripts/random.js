@@ -59,7 +59,7 @@ async function main() {
                                 break;
                             }
                 }
-                const resultFile = await lines.join('\n')        
+                const resultFile = await lines.join('\n');
                 fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
                 resolve()
             })
@@ -76,19 +76,24 @@ async function main() {
                     let reducedLine = regExp.exec(lines[index]);
                     let values = reducedLine.split(',');
                     if (values.length == 1) { // LA LINEA CORRESPONDE A UN ATAQUE
-                        
+                        reducedLine = await getRandomMove(filePaths.moves)
+                        lines[index] = `[${reducedLine}]`;
                     } else {
-                        
+                        for(let index = 0; index < values.length; index++) {
+                            values[index] = await getRandomPokemon(filePaths.pokemon);
+                        }
+                        lines[index] = values.join(',');
                     }
                 }
-                const resultFile = await lines.join('\n')        
-                fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
-                resolve()
+                const resultFile = await lines.join('\n');
+                fs.writeFile(filePaths.tms, resultFile, 'utf-8', function(){});
+                resolve();
             })
         })
     }    
     
     await randomizePokemon();
+    await randomizeTms();
     /*
     // Editar archivo de encuentros
     async function randomizeEncounters() {
