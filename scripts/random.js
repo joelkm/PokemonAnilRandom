@@ -14,7 +14,7 @@ async function main() {
         abilities: buildPath('abilities.txt'),
         encounters: buildPath('encounters.txt'),
         tms: buildPath('tm.txt'),
-        tariners: buildPath('trainers.txt'),
+        trainers: buildPath('trainers.txt'),
         items: buildPath('items.txt')
     }
     
@@ -90,10 +90,60 @@ async function main() {
                 resolve();
             })
         })
-    }    
+    }
+
+    async function randomizeEncounters() {
+        return await new Promise(function(resolve) {
+        
+            fs.readFile(filePaths.encounters, 'utf-8', async function(err, data) {
+                let lines = await data.split('\n');
+                for (let index = 0; index < lines.length; index++) {
+                    let values = lines[index].split(',');
+                    if (values.length != 1 && isNaN(values[0])) { // LA LINEA CORRESPONDE A UN ATAQUE
+                        values[0] = await getRandomPokemon(filePaths.pokemon)
+                        lines[index] = values.join(',');
+                    }
+                }
+                const resultFile = await lines.join('\n');
+                fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function(){});
+                resolve();
+            })
+        })
+    }
     
+    async function randomizeTrainers() {
+        return await new Promise(function(resolve) {
+        
+            fs.readFile(filePaths.trainers, 'utf-8', async function(err, data) {
+                let lines = await data.split('\n');
+                for (let index = 0; index < lines.length; index++) {
+                    if (lines[index].includes('#')) {
+                        if (!lines[index+1].includes('#')) {
+                            index = index + 3;
+                            let trainerInfo = lines[index].split(',')
+                            if(trainerInfo.length != 1) {
+                                for (let index = 1; index < trainerInfo.length; index++) {
+                                    trainerInfo[index] = await getRandomItem();
+                                }
+                                lines[index] = trainerInfo.join(',');
+                            }
+                        }
+                    } else {
+                        lines[index].split(',')
+                    }
+                }
+                const resultFile = await lines.join('\n');
+                fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function(){});
+                resolve();
+            })
+        })
+    }
+
     await randomizePokemon();
     await randomizeTms();
+    await randomizeEncounters();
+
+
     /*
     // Editar archivo de encuentros
     async function randomizeEncounters() {
