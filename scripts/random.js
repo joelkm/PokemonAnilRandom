@@ -89,15 +89,16 @@ async function main() {
                 for (let index = 0; index < lines.length; index++) {
                     if (!lines[index].includes('#')) {
                         let reducedLine = lines[index].split('[')[0].split(']')[0];
-                        let values = reducedLine.split(',');
-                        if (values.length == 1) {
+                        if (reducedLine.split(',').length == 1) {
                             reducedLine = await getRandomMove(filePaths.moves)
                             lines[index] = `[${reducedLine}]`;
                         } else {
-                            for(let index = 0; index < values.length; index++) {
-                                values[index] = await getRandomPokemon(pokemonCollection); // CRIMINAL ACTS AGAINST RESOURCE OPTIMIZATION
+                            let learners = '';
+                            for(let index = 0; index < pokemonCollection.length; index++) {
+                                if(Math.random() > 0.5) learners = learners + pokemonCollection[index] + ',';
                             }
-                            lines[index] = values.join(',');
+                            learners = learners.slice(0, -1);
+                            lines[index] = learners;
                         }
                     }
                 }
