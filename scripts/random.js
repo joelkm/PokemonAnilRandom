@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { getRandomMove ,getRandomAbility, getRandomPokemon } = require('./utils/getRandomProperty');
+const { getRandomMove ,getRandomAbility, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
 
 async function main() {
 
@@ -18,6 +18,20 @@ async function main() {
         items: buildPath('items.txt')
     }
     
+    let pokemonCollection = [];
+    await new Promise(function (resolve) { 
+        fs.readFile(filePaths.pokemon, 'utf-8', async function(err, data) {
+            let lines = await data.split('\n');
+            for (let index = 0; index < lines.length; index++) {
+                let lineCopy = lines[index].split('=');
+                if (lineCopy[0] == 'InternalName') {
+                    pokemonCollection.push(lineCopy[1].split('\r')[0]);
+                }
+            }
+            resolve();
+        })
+    })
+
     // Editar archivo de pokemon
     async function randomizePokemon() {
         return await new Promise(function(resolve) {
@@ -61,6 +75,7 @@ async function main() {
                 }
                 const resultFile = await lines.join('\n');
                 fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
+                console.log('Randomizado con exito: Pokemon')
                 resolve()
             })
         })
@@ -71,22 +86,24 @@ async function main() {
         
             fs.readFile(filePaths.tms, 'utf-8', async function(err, data) {
                 let lines = await data.split('\n');
-                let regExp = /\[([^)]+)\]/;
                 for (let index = 0; index < lines.length; index++) {
-                    let reducedLine = regExp.exec(lines[index]);
-                    let values = reducedLine.split(',');
-                    if (values.length == 1) { // LA LINEA CORRESPONDE A UN ATAQUE
-                        reducedLine = await getRandomMove(filePaths.moves)
-                        lines[index] = `[${reducedLine}]`;
-                    } else {
-                        for(let index = 0; index < values.length; index++) {
-                            values[index] = await getRandomPokemon(filePaths.pokemon);
+                    if (!lines[index].includes('#')) {
+                        let reducedLine = lines[index].split('[')[0].split(']')[0];
+                        let values = reducedLine.split(',');
+                        if (values.length == 1) {
+                            reducedLine = await getRandomMove(filePaths.moves)
+                            lines[index] = `[${reducedLine}]`;
+                        } else {
+                            for(let index = 0; index < values.length; index++) {
+                                values[index] = await getRandomPokemon(pokemonCollection); // CRIMINAL ACTS AGAINST RESOURCE OPTIMIZATION
+                            }
+                            lines[index] = values.join(',');
                         }
-                        lines[index] = values.join(',');
                     }
                 }
                 const resultFile = await lines.join('\n');
                 fs.writeFile(filePaths.tms, resultFile, 'utf-8', function(){});
+                console.log('Randomizado con exito: MTs')
                 resolve();
             })
         })
@@ -99,13 +116,14 @@ async function main() {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
                     let values = lines[index].split(',');
-                    if (values.length != 1 && isNaN(values[0])) { // LA LINEA CORRESPONDE A UN ATAQUE
-                        values[0] = await getRandomPokemon(filePaths.pokemon)
+                    if (values.length != 1 && isNaN(values[0])) {
+                        values[0] = await getRandomPokemon(pokemonCollection)
                         lines[index] = values.join(',');
                     }
                 }
                 const resultFile = await lines.join('\n');
                 fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function(){});
+                console.log('Randomizado con exito: Encuentros')
                 resolve();
             })
         })
@@ -123,17 +141,24 @@ async function main() {
                             let trainerInfo = lines[index].split(',')
                             if(trainerInfo.length != 1) {
                                 for (let index = 1; index < trainerInfo.length; index++) {
-                                    trainerInfo[index] = await getRandomItem();
+                                    trainerInfo[index] = await getRandomItem(filePaths.items);
                                 }
                                 lines[index] = trainerInfo.join(',');
                             }
                         }
                     } else {
-                        lines[index].split(',')
+                        let pokemonValues = lines[index].split(',');
+                        pokemonValues[0] = await getRandomPokemon(pokemonCollection);
+                        lines[index] = pokemonValues[0] + ',' + pokemonValues[1];
+                        if(pokemonValues[2] && pokemonValues[2] != '') {
+                            pokemonValues[2] = await getRandomItem(filePaths.items);
+                            lines[index] = lines[index] + ',' + pokemonValues[2];
+                        }
                     }
                 }
                 const resultFile = await lines.join('\n');
                 fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function(){});
+                console.log('Randomizado con exito: Entrenadores')
                 resolve();
             })
         })
@@ -142,6 +167,7 @@ async function main() {
     await randomizePokemon();
     await randomizeTms();
     await randomizeEncounters();
+    await randomizeTrainers();
 
 
     /*
