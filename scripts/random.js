@@ -49,8 +49,10 @@ async function main() {
                             const learningLevels = values.filter(function(element) {
                                 if(!isNaN(parseInt(element))) return element;
                             });
+                            let mandatoryHitMove = true;
                             for (let index = 0; index < learningLevels.length; index++) {
-                                valueResult = valueResult + learningLevels[index] + ',' + await getRandomMove(filePaths.moves) + ',';
+                                valueResult = valueResult + learningLevels[index] + ',' + await getRandomMove(filePaths.moves, mandatoryHitMove) + ',';
+                                mandatoryHitMove = false;
                             }
                             valueResult = valueResult.slice(0,-1);
                             lines[index] = property + '=' + valueResult;

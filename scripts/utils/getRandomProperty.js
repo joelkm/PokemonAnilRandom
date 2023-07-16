@@ -1,9 +1,13 @@
 const nthline = require('nthline');
 
 module.exports = {
-    getRandomMove: async function(filePath, min = 0, max = 643) {
-        const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
-        const valueResult = await nthline(randomLine ,filePath)
+    getRandomMove: async function(filePath, min = 0, max = 643, mandatoryHitMove) {
+        let valueResult;
+        do {
+            const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
+            valueResult = await nthline(randomLine ,filePath)
+        } while (mandatoryHitMove && valueResult.split(',')[6] == "Status");
+
         return valueResult.split(',')[1];
     },
     getRandomAbility: async function(filePath, min = 0, max = 204) {
