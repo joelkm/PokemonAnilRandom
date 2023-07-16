@@ -16,8 +16,14 @@ module.exports = {
         return pokemon[randomPokemonNumber];
     },
     getRandomItem: async function(filePath, min = 0, max = 688) {
-        const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
-        const valueResult = await nthline(randomLine ,filePath)
-        return valueResult.split(',')[1];
+        let valueResult
+        let item;
+        do {
+            const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
+            item = await nthline(randomLine ,filePath);
+            valueResult = item.split(',');
+        } while (valueResult[4] != 7);
+        
+        return valueResult[1];
     }
 }
