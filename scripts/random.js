@@ -140,12 +140,6 @@ async function main() {
                         if (!lines[index+1].includes('#')) {
                             index = index + 3;
                             let trainerInfo = lines[index].split(',')
-                            if(trainerInfo.length != 1) {
-                                for (let index = 1; index < trainerInfo.length; index++) {
-                                    trainerInfo[index] = await getRandomItem(filePaths.items);
-                                }
-                                lines[index] = trainerInfo.join(',');
-                            }
                         }
                     } else {
                         let pokemonValues = lines[index].split(',');
