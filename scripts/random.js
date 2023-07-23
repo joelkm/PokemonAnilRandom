@@ -76,7 +76,7 @@ async function main() {
                             }
                 }
                 const resultFile = await lines.join('\n');
-                fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
+                await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
                 console.log('Randomizado con exito: Pokemon')
                 resolve()
             })
@@ -84,16 +84,23 @@ async function main() {
     }
 
     async function randomizeTms() {
-        return await new Promise(function(resolve) {
+        let doneTms = [];
+        let tmIndex = 0;
+        await new Promise(function(resolve) {
         
             fs.readFile(filePaths.tms, 'utf-8', async function(err, data) {
                 let lines = await data.split('\n');
+                const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY'];
+
                 for (let index = 0; index < lines.length; index++) {
                     if (!lines[index].includes('#')) {
                         let reducedLine = lines[index].split('[')[0].split(']')[0];
                         if (reducedLine.split(',').length == 1) {
-                            reducedLine = await getRandomMove(filePaths.moves)
+                            if(!mohs.includes(reducedLine.split(',')[0])){
+                                reducedLine = await getRandomMove(filePaths.moves);
+                            }
                             lines[index] = `[${reducedLine}]`;
+                            doneTms.push(reducedLine);
                         } else {
                             let learners = '';
                             for(let index = 0; index < pokemonCollection.length; index++) {
@@ -105,11 +112,31 @@ async function main() {
                     }
                 }
                 const resultFile = await lines.join('\n');
-                fs.writeFile(filePaths.tms, resultFile, 'utf-8', function(){});
+                await fs.writeFile(filePaths.tms, resultFile, 'utf-8', function(){});
                 console.log('Randomizado con exito: MTs')
                 resolve();
             })
         })
+        console.log(doneTms);
+        await new Promise(function(resolve) {
+        
+            fs.readFile(filePaths.items, 'utf-8', async function(err, data) {
+                let lines = await data.split('\n');
+                for (let index = 0; index < lines.length; index++) {
+                    let line = lines[index].split(',');
+                    if (line[1].includes('TM') && line[2].includes('MT')
+                        || line[1].includes('HM') && line[2].includes('MO')) {
+                        line[10] = doneTms[tmIndex];
+                        tmIndex++;
+                    }
+                    lines[index] = await line.join(',');
+                }
+                const resultFile = await lines.join('\n');
+                await fs.writeFile(filePaths.items, resultFile, 'utf-8', function(){});
+                console.log('Enlazado con éxito: MTs')
+                resolve();
+            })
+        });
     }
 
     async function randomizeEncounters() {
@@ -125,7 +152,7 @@ async function main() {
                     }
                 }
                 const resultFile = await lines.join('\n');
-                fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function(){});
+                await fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function(){});
                 console.log('Randomizado con exito: Encuentros')
                 resolve();
             })
@@ -154,7 +181,7 @@ async function main() {
                     }
                 }
                 const resultFile = await lines.join('\n');
-                fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function(){});
+                await fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function(){});
                 console.log('Randomizado con exito: Entrenadores')
                 resolve();
             })
@@ -210,7 +237,7 @@ async function main() {
                             }
                 }
                 const resultFile = await lines.join('\n')        
-                fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
+                await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
             })
         })
     } 
