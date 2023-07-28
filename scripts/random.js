@@ -90,13 +90,18 @@ async function main() {
         
             fs.readFile(filePaths.tms, 'utf-8', async function(err, data) {
                 let lines = await data.split('\n');
-                const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY'];
+                const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE'];
 
                 for (let index = 0; index < lines.length; index++) {
                     if (!lines[index].includes('#')) {
-                        let reducedLine = lines[index].split('[')[0].split(']')[0];
+                        let reducedLine;
+                        try {
+                            reducedLine = await lines[index].split('[')[1].split(']')[0] || lines[index];
+                        } catch (error) {
+                            reducedLine = lines[index]
+                        }
                         if (reducedLine.split(',').length == 1) {
-                            if(!mohs.includes(reducedLine.split(',')[0])){
+                            if(mohs.includes(reducedLine) == false){
                                 reducedLine = await getRandomMove(filePaths.moves);
                             }
                             lines[index] = `[${reducedLine}]`;
@@ -117,16 +122,14 @@ async function main() {
                 resolve();
             })
         })
-        console.log(doneTms);
         await new Promise(function(resolve) {
         
             fs.readFile(filePaths.items, 'utf-8', async function(err, data) {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
                     let line = lines[index].split(',');
-                    if (line[1].includes('TM') && line[2].includes('MT')
-                        || line[1].includes('HM') && line[2].includes('MO')) {
-                        line[10] = doneTms[tmIndex];
+                    if (line[1].includes('TM') && line[2].includes('MT')) {
+                        line[line.length-1] = doneTms[tmIndex];
                         tmIndex++;
                     }
                     lines[index] = await line.join(',');
