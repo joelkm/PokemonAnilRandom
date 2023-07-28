@@ -129,13 +129,18 @@ async function randomize() {
     }
 
     async function randomizeEncountersFile() {
+        function isPokemon(values) {
+            if (values.length != 1 && isNaN(values[0])) return true; // Pattern to identify pokemon lines 
+            else return false;
+        }
+
         return await new Promise(function (resolve) {
 
             fs.readFile(filePaths.encounters, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
                     let values = lines[index].split(',');
-                    if (values.length != 1 && isNaN(values[0])) {
+                    if (isPokemon(values)) {
                         values[0] = await getRandomPokemon(pokemonCollection)
                         lines[index] = values.join(',');
                     }
@@ -144,7 +149,7 @@ async function randomize() {
                 const resultFile = await lines.join('\n');
                 await fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function () { });
 
-                console.log('Randomizado con exito: Encuentros')
+                console.log('Encuentros: Randomizado con exito');
                 resolve();
             })
         })
