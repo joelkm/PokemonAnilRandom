@@ -1,33 +1,39 @@
 const nthline = require('nthline');
 
-module.exports = {
-    getRandomMove: async function (filePath, min = 0, max = 643, mandatoryHitMove) {
-        let valueResult;
-        do {
-            const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
-            valueResult = await nthline(randomLine, filePath)
-        } while (mandatoryHitMove && valueResult.split(',')[6] == "Status");
+function getRandomIntervalNumber(min, max) {
+    return Math.floor((Math.random() * (max - min + 1) + min));
+}
 
-        return valueResult.split(',')[1];
+module.exports = {
+    getRandomMove: async function (filePath, firstLine = 0, lastLine = 643, hitMoveIsMandatory) {
+        let line;
+        let values;
+        do {
+            const randomLine = getRandomIntervalNumber(firstLine, lastLine);
+            line = await nthline(randomLine, filePath);
+            values = line.split(',');
+        } while (hitMoveIsMandatory && values[6] == "Status");
+
+        return values[1];
     },
-    getRandomAbility: async function (filePath, min = 0, max = 204) {
-        const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
-        const valueResult = await nthline(randomLine, filePath);
-        return valueResult.split(',')[1];
+    getRandomAbility: async function (filePath, firstLine = 0, lastLine = 204) {
+        const randomLine = getRandomIntervalNumber(firstLine, lastLine);
+        const line = await nthline(randomLine, filePath);
+        return line.split(',')[1];
     },
     getRandomPokemon: async function (pokemon) {
-        const randomPokemonNumber = Math.floor((Math.random() * (pokemon.length - 1 - 0 + 1) + 0));
+        const randomPokemonNumber = getRandomIntervalNumber(0, pokemon.length - 1)
         return pokemon[randomPokemonNumber];
     },
-    getRandomCombatItem: async function (filePath, min = 0, max = 688) {
-        let valueResult
-        let item;
+    getRandomCombatItem: async function (filePath, firstLine = 0, lastLine = 688) {
+        let line;
+        let itemParams;
         do {
-            const randomLine = Math.floor((Math.random() * (max - min + 1) + min));
-            item = await nthline(randomLine, filePath);
-            valueResult = item.split(',');
-        } while (valueResult[4] != 7);
+            const randomLine = getRandomIntervalNumber(firstLine, lastLine);
+            line = await nthline(randomLine, filePath);
+            itemParams = line.split(',');
+        } while (itemParams[4] != 7); // Item is not identified as "Combat"
 
-        return valueResult[1];
+        return itemParams[1];
     }
 }
