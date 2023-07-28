@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { getRandomMove, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
+const { getRandomMove, getRandomPokemon, getRandomCombatItem } = require('./utils/getRandomProperty');
 const { buildMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
 
 async function randomize() {
@@ -20,6 +20,11 @@ async function randomize() {
     }
 
     let pokemonCollection = []; // Filled in randomizePokemonFile(), used in randomizeTmsFile()
+
+    function isCommentLine(line) { // Useful to detect comment lines in any file
+        if (line.includes('#')) return true;
+        else return false;
+    }
 
     async function randomizePokemonFile() {
 
@@ -82,7 +87,7 @@ async function randomize() {
                 // Essential tms that we shouldn't modify
 
                 for (let index = 0; index < lines.length; index++) {
-                    if (lines[index].includes('#')) continue;
+                    if (isCommentLine(lines[index])) continue;
 
                     if (reducedLine.split(',').length == 1) {
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
@@ -140,6 +145,7 @@ async function randomize() {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
                     let values = lines[index].split(',');
+
                     if (isPokemon(values)) {
                         values[0] = await getRandomPokemon(pokemonCollection)
                         lines[index] = values.join(',');
@@ -158,21 +164,27 @@ async function randomize() {
     async function randomizeTrainersFile() {
         return await new Promise(function (resolve) {
 
+            function usesCombatItem(pokemonParams) {
+                if (pokemonParams[2] && pokemonParams[2] != '') return true;
+                else return false
+            }
+
             fs.readFile(filePaths.trainers, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
-                    if (lines[index].includes('#')) {
-                        if (!lines[index + 1].includes('#')) {
+                    if (isCommentLine(lines[index])) {
+                        if (!isCommentLine(lines[index + 1])) { // Detects that the next line corresponds to the trainer name, so it skips to the next pokemon
                             index = index + 3;
-                            let trainerInfo = lines[index].split(',')
                         }
                     } else {
-                        let pokemonValues = lines[index].split(',');
-                        pokemonValues[0] = await getRandomPokemon(pokemonCollection);
-                        lines[index] = pokemonValues[0] + ',' + pokemonValues[1];
-                        if (pokemonValues[2] && pokemonValues[2] != '') {
-                            pokemonValues[2] = await getRandomItem(filePaths.items);
-                            lines[index] = lines[index] + ',' + pokemonValues[2];
+                        let pokemonParams = lines[index].split(',');
+
+                        pokemonParams[0] = await getRandomPokemon(pokemonCollection);
+                        lines[index] = pokemonParams[0] + ',' + pokemonParams[1];
+
+                        if (usesCombatItem(pokemonParams)) {
+                            pokemonParams[2] = await getRandomCombatItem(filePaths.items);
+                            lines[index] = lines[index] + ',' + pokemonParams[2];
                         }
                     }
                 }
