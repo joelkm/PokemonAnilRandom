@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-const { getRandomMove ,getRandomAbility, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
+const { getRandomMove, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
+const { buildMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
 
-async function main() {
+async function randomize() {
 
     function buildPath(file) {
         return path.join(__dirname, '..', '..', 'PBS', file);
     }
-    
+
     const filePaths = {
         pokemon: buildPath('pokemon.txt'),
         moves: buildPath('moves.txt'),
@@ -17,135 +18,120 @@ async function main() {
         trainers: buildPath('trainers.txt'),
         items: buildPath('items.txt')
     }
-    
-    let pokemonCollection = [];
-    await new Promise(function (resolve) { 
-        fs.readFile(filePaths.pokemon, 'utf-8', async function(err, data) {
-            let lines = await data.split('\n');
-            for (let index = 0; index < lines.length; index++) {
-                let lineCopy = lines[index].split('=');
-                if (lineCopy[0] == 'InternalName') {
-                    pokemonCollection.push(lineCopy[1].split('\r')[0]);
-                }
-            }
-            resolve();
-        })
-    })
 
-    // Editar archivo de pokemon
-    async function randomizePokemon() {
-        return await new Promise(function(resolve) {
-        
-            fs.readFile(filePaths.pokemon, 'utf-8', async function(err, data) {
+    let pokemonCollection = []; // Filled in randomizePokemonFile(), used in randomizeTmsFile()
+
+    async function randomizePokemonFile() {
+
+        function getLearningLevels(values) {
+            return values.filter(function (element) {
+                if (!isNaN(parseInt(element))) return element;
+            });
+        }
+
+        return await new Promise(function (resolve) {
+            fs.readFile(filePaths.pokemon, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
-                    const lineCopy = lines[index].split('=');
-                    const property = lineCopy[0];
-        
-                    const values = (lineCopy[1]) ? lineCopy[1].split(',') : null;
-                    let valueResult = ''
+                    const splitedLineByEqual = lines[index].split('=');
+                    const property = splitedLineByEqual[0];
+
+                    const values = splitedLineByEqual[1].split(',');
                     switch (property) {
                         case 'Moves':
-                            const learningLevels = values.filter(function(element) {
-                                if(!isNaN(parseInt(element))) return element;
-                            });
-                            let mandatoryHitMove = true;
-                            for (let index = 0; index < learningLevels.length; index++) {
-                                valueResult = valueResult + learningLevels[index] + ',' + await getRandomMove(filePaths.moves, mandatoryHitMove) + ',';
-                                mandatoryHitMove = false;
-                            }
-                            valueResult = valueResult.slice(0,-1);
-                            lines[index] = property + '=' + valueResult;
+                            const learningLevels = getLearningLevels(values);
+
+                            lines[index] = property + '=' + await buildMoveSet(learningLevels);
                             break;
                         case 'Abilities':
-                            for (let index = 0; index < values.length; index++) {
-                                valueResult = valueResult + await getRandomAbility(filePaths.abilities) + ',';
-                            }
-                            valueResult = valueResult.slice(0,-1);
-                            lines[index] = property + '=' + valueResult;
+                            lines[index] = property + '=' + await buildAbilitySet(values);
                             break;
-                            case 'HiddenAbility':
-                                for (let index = 0; index < values.length; index++) {
-                                    valueResult = valueResult + await getRandomAbility(filePaths.abilities) + ',';
-                                }
-                                valueResult = valueResult.slice(0,-1);
-                                lines[index] = property + '=' + valueResult;
+                        case 'HiddenAbility':
+                            lines[index] = property + '=' + await buildAbilitySet(values);
                             break;
-                            default:
-                                break;
-                            }
+                        case 'InternalName':
+                            pokemonCollection.push(lineCopy[1].split('\r')[0]); // Will come handy when randomizing TMs
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
                 const resultFile = await lines.join('\n');
-                await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
-                console.log('Randomizado con exito: Pokemon')
+                await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function () { })
+
+                console.log('Pokemon: Randomizados con exito');
                 resolve()
             })
         })
     }
 
-    async function randomizeTms() {
-        let doneTms = [];
-        let tmIndex = 0;
-        await new Promise(function(resolve) {
-        
-            fs.readFile(filePaths.tms, 'utf-8', async function(err, data) {
+    async function randomizeTmsFile() {
+
+        function isTmItem(itemParams) {
+            itemParams[1].includes('TM') && itemParams[2].includes('MT')
+        }
+
+        let tmsCollection = []; // This is used to bind the TM data to the in-game items
+
+        await new Promise(function (resolve) {
+
+            fs.readFile(filePaths.tms, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
                 const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE'];
+                // Essential tms that we shouldn't modify
 
                 for (let index = 0; index < lines.length; index++) {
-                    if (!lines[index].includes('#')) {
-                        let reducedLine;
-                        try {
-                            reducedLine = await lines[index].split('[')[1].split(']')[0] || lines[index];
-                        } catch (error) {
-                            reducedLine = lines[index]
-                        }
-                        if (reducedLine.split(',').length == 1) {
-                            if(mohs.includes(reducedLine) == false){
-                                reducedLine = await getRandomMove(filePaths.moves);
-                            }
-                            lines[index] = `[${reducedLine}]`;
-                            doneTms.push(reducedLine);
-                        } else {
-                            let learners = '';
-                            for(let index = 0; index < pokemonCollection.length; index++) {
-                                if(Math.random() > 0.5) learners = learners + pokemonCollection[index] + ',';
-                            }
-                            learners = learners.slice(0, -1);
-                            lines[index] = learners;
-                        }
+                    if (lines[index].includes('#')) continue;
+
+                    if (reducedLine.split(',').length == 1) {
+                        let tmMove = await lines[index].split('[')[1].split(']')[0];
+
+                        if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);
+
+                        lines[index] = `[${tmMove}]`;
+                        tmsCollection.push(tmMove);
+                    } else {
+                        lines[index] = buildTmLearnerList();
                     }
                 }
+
                 const resultFile = await lines.join('\n');
-                await fs.writeFile(filePaths.tms, resultFile, 'utf-8', function(){});
-                console.log('Randomizado con exito: MTs')
+                await fs.writeFile(filePaths.tms, resultFile, 'utf-8', function () { });
+
+                console.log('Datos de MTs: Randomizados con exito')
                 resolve();
             })
         })
-        await new Promise(function(resolve) {
-        
-            fs.readFile(filePaths.items, 'utf-8', async function(err, data) {
+        await new Promise(function (resolve) {
+
+            fs.readFile(filePaths.items, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
+                let tmsCollectionIndex = 0;
                 for (let index = 0; index < lines.length; index++) {
-                    let line = lines[index].split(',');
-                    if (line[1].includes('TM') && line[2].includes('MT')) {
-                        line[line.length-1] = doneTms[tmIndex];
-                        tmIndex++;
+                    let itemParams = lines[index].split(',');
+
+                    if (isTmItem(itemParams)) {
+                        itemParams[itemParams.length - 1] = tmsCollection[tmsCollectionIndex];
+                        tmsCollectionIndex++;
                     }
-                    lines[index] = await line.join(',');
+
+                    lines[index] = await itemParams.join(',');
                 }
+
                 const resultFile = await lines.join('\n');
-                await fs.writeFile(filePaths.items, resultFile, 'utf-8', function(){});
-                console.log('Enlazado con éxito: MTs')
+                await fs.writeFile(filePaths.items, resultFile, 'utf-8', function () { });
+
+                console.log('Objetos MT: Enlazados con exito');
                 resolve();
             })
         });
     }
 
-    async function randomizeEncounters() {
-        return await new Promise(function(resolve) {
-        
-            fs.readFile(filePaths.encounters, 'utf-8', async function(err, data) {
+    async function randomizeEncountersFile() {
+        return await new Promise(function (resolve) {
+
+            fs.readFile(filePaths.encounters, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
                     let values = lines[index].split(',');
@@ -154,22 +140,24 @@ async function main() {
                         lines[index] = values.join(',');
                     }
                 }
+
                 const resultFile = await lines.join('\n');
-                await fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function(){});
+                await fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function () { });
+
                 console.log('Randomizado con exito: Encuentros')
                 resolve();
             })
         })
     }
-    
-    async function randomizeTrainers() {
-        return await new Promise(function(resolve) {
-        
-            fs.readFile(filePaths.trainers, 'utf-8', async function(err, data) {
+
+    async function randomizeTrainersFile() {
+        return await new Promise(function (resolve) {
+
+            fs.readFile(filePaths.trainers, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
                 for (let index = 0; index < lines.length; index++) {
                     if (lines[index].includes('#')) {
-                        if (!lines[index+1].includes('#')) {
+                        if (!lines[index + 1].includes('#')) {
                             index = index + 3;
                             let trainerInfo = lines[index].split(',')
                         }
@@ -177,94 +165,24 @@ async function main() {
                         let pokemonValues = lines[index].split(',');
                         pokemonValues[0] = await getRandomPokemon(pokemonCollection);
                         lines[index] = pokemonValues[0] + ',' + pokemonValues[1];
-                        if(pokemonValues[2] && pokemonValues[2] != '') {
+                        if (pokemonValues[2] && pokemonValues[2] != '') {
                             pokemonValues[2] = await getRandomItem(filePaths.items);
                             lines[index] = lines[index] + ',' + pokemonValues[2];
                         }
                     }
                 }
+
                 const resultFile = await lines.join('\n');
-                await fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function(){});
+                await fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function () { });
+
                 console.log('Randomizado con exito: Entrenadores')
                 resolve();
             })
         })
     }
 
-    await randomizePokemon();
-    await randomizeTms();
-    await randomizeEncounters();
-    await randomizeTrainers();
-
-
-    /*
-    // Editar archivo de encuentros
-    async function randomizeEncounters() {
-        return await new Promise(function() {
-        
-            fs.readFile(filePaths.pokemon, 'utf-8', async function(err, data) {
-                let lines = await data.split('\n');
-                for (let index = 0; index < lines.length; index++) {
-                    const lineCopy = lines[index].split('=');
-                    const property = lineCopy[0];
-        
-                    const values = (lineCopy[1]) ? lineCopy[1].split(',') : null;
-                    let valueResult = ''
-                    switch (property) {
-                        case 'Moves':
-                            const learningLevels = values.filter(function(element) {
-                                if(!isNaN(parseInt(element))) return element;
-                            });
-                            for (let index = 0; index < learningLevels.length; index++) {
-                                valueResult = valueResult + learningLevels[index] + ',' + await getRandomMove(filePaths.moves) + ',';
-                            }
-                            valueResult = valueResult.slice(0,-1);
-                            lines[index] = property + '=' + valueResult;
-                            break;
-                        case 'Abilities':
-                            for (let index = 0; index < values.length; index++) {
-                                valueResult = valueResult + await getRandomAbility(filePaths.abilities) + ',';
-                            }
-                            valueResult = valueResult.slice(0,-1);
-                            lines[index] = property + '=' + valueResult;
-                            break;
-                            case 'HiddenAbility':
-                                for (let index = 0; index < values.length; index++) {
-                                    valueResult = valueResult + await getRandomAbility(filePaths.abilities) + ',';
-                                }
-                                valueResult = valueResult.slice(0,-1);
-                                lines[index] = property + '=' + valueResult;
-                            break;
-                            default:
-                                break;
-                            }
-                }
-                const resultFile = await lines.join('\n')        
-                await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function(){})
-            })
-        })
-    } 
-    
-    
-    // Editar entrenadores
-    
-    
-    
-    // Editar items
-    /*
-    switch (line) {
-        case 'Moves':
-            
-            break;
-        case 'Abilities':
-            
-            break;
-        case 'HiddenAbility':
-            
-            break;
-        default:
-            break;
-    }*/
+    await randomizePokemonFile();
+    await randomizeTmsFile();
+    await randomizeEncountersFile();
+    await randomizeTrainersFile();
 }
-
-main();
