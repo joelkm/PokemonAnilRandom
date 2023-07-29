@@ -26,6 +26,7 @@ async function randomize() {
         else return false;
     }
 
+
     async function randomizePokemonFile() {
 
         function getLearningLevels(values) {
@@ -71,10 +72,13 @@ async function randomize() {
         })
     }
 
+
     async function randomizeTmsFile() {
 
         function isTmItem(itemParams) {
-            itemParams[1].includes('TM') && itemParams[2].includes('MT')
+            if (itemParams[1].includes('TM') && itemParams[4] == 4) return true;
+            else return false;
+
         }
 
         let tmsCollection = []; // This is used to bind the TM data to the in-game items
@@ -133,6 +137,7 @@ async function randomize() {
         });
     }
 
+
     async function randomizeEncountersFile() {
         function isPokemon(values) {
             if (values.length != 1 && isNaN(values[0])) return true; // Pattern to identify pokemon lines 
@@ -160,6 +165,7 @@ async function randomize() {
             })
         })
     }
+
 
     async function randomizeTrainersFile() {
         return await new Promise(function (resolve) {
@@ -198,8 +204,11 @@ async function randomize() {
         })
     }
 
+
     await randomizePokemonFile();
     await randomizeTmsFile();
     await randomizeEncountersFile();
     await randomizeTrainersFile();
 }
+
+randomize();
