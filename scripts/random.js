@@ -42,24 +42,24 @@ async function randomize() {
                     const splitedLineByEqual = lines[index].split('=');
                     const property = splitedLineByEqual[0];
 
-                    const values = splitedLineByEqual[1].split(',');
-                    switch (property) {
-                        case 'Moves':
-                            const learningLevels = getLearningLevels(values);
+                    if (splitedLineByEqual[1]) {
+                        const values = splitedLineByEqual[1].split(',');
+                        switch (property) {
+                            case 'Moves':
+                                const learningLevels = getLearningLevels(values);
 
-                            lines[index] = property + '=' + await buildMoveSet(learningLevels);
-                            break;
-                        case 'Abilities':
-                            lines[index] = property + '=' + await buildAbilitySet(values);
-                            break;
-                        case 'HiddenAbility':
-                            lines[index] = property + '=' + await buildAbilitySet(values);
-                            break;
-                        case 'InternalName':
-                            pokemonCollection.push(lineCopy[1].split('\r')[0]); // Will come handy when randomizing TMs
-                            break;
-                        default:
-                            break;
+                                lines[index] = property + '=' + await buildMoveSet(learningLevels);
+                                break;
+                            case 'Abilities':
+                            case 'HiddenAbility':
+                                lines[index] = property + '=' + await buildAbilitySet(values);
+                                break;
+                            case 'InternalName':
+                                pokemonCollection.push(lineCopy[1].split('\r')[0]); // Will come handy when randomizing TMs
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
 
