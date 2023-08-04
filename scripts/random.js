@@ -55,7 +55,7 @@ async function randomize() {
                                 lines[index] = property + '=' + await buildAbilitySet(values);
                                 break;
                             case 'InternalName':
-                                pokemonCollection.push(lineCopy[1].split('\r')[0]); // Will come handy when randomizing TMs
+                                pokemonCollection.push(values.split('\r')[0]); // Will come handy when randomizing TMs
                                 break;
                             default:
                                 break;
