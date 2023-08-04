@@ -81,7 +81,6 @@ async function randomize() {
                     if (isCommentLine(lines[index])) continue;
 
                     if (lines[index].split(',').length == 1) {
-                        console.log(lines[index]);
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
 
                         if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);
