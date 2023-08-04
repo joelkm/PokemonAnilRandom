@@ -1,28 +1,15 @@
 const fs = require('fs');
-const path = require('path');
 const { getRandomMove, getRandomPokemon, getRandomCombatItem } = require('./utils/getRandomProperty');
 const { buildMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
+const filePaths = require('./utils/fileHandler');
+const { log } = require('console');
 
 async function randomize() {
-
-    function buildPath(file) {
-        return path.join(__dirname, '..', '..', 'PBS', file);
-    }
-
-    const filePaths = {
-        pokemon: buildPath('pokemon.txt'),
-        moves: buildPath('moves.txt'),
-        abilities: buildPath('abilities.txt'),
-        encounters: buildPath('encounters.txt'),
-        tms: buildPath('tm.txt'),
-        trainers: buildPath('trainers.txt'),
-        items: buildPath('items.txt')
-    }
 
     let pokemonCollection = []; // Filled in randomizePokemonFile(), used in randomizeTmsFile()
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
-        if (line.includes('#')) return true;
+        if (line.includes('#') || !line.split('/r')[0]) return true;
         else return false;
     }
 
@@ -55,7 +42,7 @@ async function randomize() {
                                 lines[index] = property + '=' + await buildAbilitySet(values);
                                 break;
                             case 'InternalName':
-                                pokemonCollection.push(values.split('\r')[0]); // Will come handy when randomizing TMs
+                                pokemonCollection.push(values[0].split('\r')[0]); // Will come handy when randomizing TMs
                                 break;
                             default:
                                 break;
@@ -93,7 +80,8 @@ async function randomize() {
                 for (let index = 0; index < lines.length; index++) {
                     if (isCommentLine(lines[index])) continue;
 
-                    if (reducedLine.split(',').length == 1) {
+                    if (lines[index].split(',').length == 1) {
+                        console.log(lines[index]);
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
 
                         if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);
@@ -101,7 +89,7 @@ async function randomize() {
                         lines[index] = `[${tmMove}]`;
                         tmsCollection.push(tmMove);
                     } else {
-                        lines[index] = buildTmLearnerList();
+                        lines[index] = buildTmLearnerList(pokemonCollection);
                     }
                 }
 

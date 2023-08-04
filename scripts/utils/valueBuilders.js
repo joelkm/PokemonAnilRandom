@@ -1,5 +1,5 @@
 const { getRandomMove, getRandomAbility } = require('./getRandomProperty');
-
+const filePaths = require('./fileHandler');
 
 module.exports = {
     buildMoveSet: async function (learningLevels) {
@@ -25,7 +25,7 @@ module.exports = {
 
         return newValues
     },
-    buildTmLearnerList: function () { // In Random locke, each single pokemon has a 50% chance to learn a TM move
+    buildTmLearnerList: function (pokemonCollection) { // In Random locke, each single pokemon has a 50% chance to learn a TM move
         let learners = '';
         for (let index = 0; index < pokemonCollection.length; index++) {
             if (Math.random() > 0.5) learners = learners + pokemonCollection[index] + ',';
