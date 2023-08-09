@@ -9,6 +9,7 @@ async function randomize() {
     let pokemonCollection = []; // Filled in processPokemonFile(), used in processItemsFile()
     let maxEvolvedPokemon = [];
     let megastoneCollection = [];
+    let megapokemonCollection = []
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
         if (line.includes('#') || !line.split('/r')[0]) return true;
@@ -42,6 +43,11 @@ async function randomize() {
                             case 'Abilities':
                             case 'HiddenAbility':
                                 lines[index] = property + '=' + await buildAbilitySet(values);
+                                break;
+                            case 'WildItemCommon':
+                            case 'WildItemUncommon':
+                            case 'WildItemRare':
+                                lines[index] = property + '=' + await getRandomItem(filePaths.items);
                                 break;
                             case 'InternalName':
                                 pokemonCollection.push(values[0].split('\r')[0]); // Will come handy when randomizing TMs
