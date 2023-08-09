@@ -38,7 +38,7 @@ module.exports = {
             const randomLine = getRandomIntervalNumber(firstLine, lastLine);
             line = await nthline(randomLine, filePath);
             itemParams = line.split(',');
-        } while (!itemFlags.includes(itemParams[4])); // Item is not identified as "Combat"
+        } while (!itemFlags.includes(itemParams[4]) && !itemParams[2].split(' ').includes('Carta')); // Item is doesn't belong to the flagged items and is not a mail card
 
         return itemParams[1];
     }

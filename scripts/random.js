@@ -82,7 +82,7 @@ async function randomize() {
         }
 
         function isMegastone(itemParams) {
-            if (itemParams[4] == 6) return true;
+            if (itemParams[4] == 6 && !itemParams[2].split(' ').includes('Carta')) return true; // Megastones are flagged as "mail items", we discard these with the second condition
             else return false;
         }
 
