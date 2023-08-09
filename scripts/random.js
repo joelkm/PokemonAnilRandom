@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { getRandomMove, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
-const { buildMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
+const { buildLvlMoveSet, buildEggMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
 const filePaths = require('./utils/fileHandler');
 const { log } = require('console');
 
@@ -38,7 +38,11 @@ async function randomize() {
                             case 'Moves':
                                 const learningLevels = getLearningLevels(values);
 
-                                lines[index] = property + '=' + await buildMoveSet(learningLevels);
+                                lines[index] = property + '=' + await buildLvlMoveSet(learningLevels);
+                                break;
+                            case 'EggMoves':
+                                const eggMoves = values.split(',');
+                                lines[index] = property + '=' + await buildEggMoveSet(eggMoves);
                                 break;
                             case 'Abilities':
                             case 'HiddenAbility':
