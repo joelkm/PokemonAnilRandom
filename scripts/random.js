@@ -7,6 +7,7 @@ const { log } = require('console');
 async function randomize() {
 
     let pokemonCollection = []; // Filled in randomizePokemonFile(), used in randomizeTmsFile()
+    let maxEvolvedPokemon = [];
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
         if (line.includes('#') || !line.split('/r')[0]) return true;
@@ -43,6 +44,11 @@ async function randomize() {
                                 break;
                             case 'InternalName':
                                 pokemonCollection.push(values[0].split('\r')[0]); // Will come handy when randomizing TMs
+                                break;
+                            case 'Evolutions':
+                                if (!value) {
+                                    maxEvolvedPokemon.push(pokemonCollection[pokemonCollection.length - 1]);
+                                }
                                 break;
                             default:
                                 break;
@@ -171,9 +177,9 @@ async function randomize() {
                         }
                     } else {
                         let pokemonParams = lines[index].split(',');
-
-                        pokemonParams[0] = await getRandomPokemon(pokemonCollection);
-                        lines[index] = pokemonParams[0] + ',' + pokemonParams[1];
+                        pokemonParams[0](pokemonParams[1] < 36)
+                            ? await getRandomPokemon(pokemonCollection)
+                            : await getRandomPokemon(maxEvolvedPokemon);
 
                         if (usesCombatItem(pokemonParams)) {
                             pokemonParams[2] = await getRandomCombatItem(filePaths.items);
