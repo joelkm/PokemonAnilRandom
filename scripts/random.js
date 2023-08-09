@@ -1,13 +1,14 @@
 const fs = require('fs');
-const { getRandomMove, getRandomPokemon, getRandomCombatItem } = require('./utils/getRandomProperty');
+const { getRandomMove, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
 const { buildMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
 const filePaths = require('./utils/fileHandler');
 const { log } = require('console');
 
 async function randomize() {
 
-    let pokemonCollection = []; // Filled in randomizePokemonFile(), used in randomizeTmsFile()
+    let pokemonCollection = []; // Filled in processPokemonFile(), used in processItemsFile()
     let maxEvolvedPokemon = [];
+    let megastoneCollection = [];
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
         if (line.includes('#') || !line.split('/r')[0]) return true;
@@ -15,7 +16,7 @@ async function randomize() {
     }
 
 
-    async function randomizePokemonFile() {
+    async function processPokemon() {
 
         function getLearningLevels(values) {
             return values.filter(function (element) {
@@ -66,12 +67,17 @@ async function randomize() {
     }
 
 
-    async function randomizeTmsFile() {
+    async function processItems() {
 
         function isTmItem(itemParams) {
             if (itemParams[1].includes('TM') && itemParams[4] == 4) return true;
             else return false;
 
+        }
+
+        function isMegastone(itemParams) {
+            if (itemParams[4] == 6) return true;
+            else return false;
         }
 
         let tmsCollection = []; // This is used to bind the TM data to the in-game items
@@ -87,6 +93,7 @@ async function randomize() {
                     if (isCommentLine(lines[index])) continue;
 
                     if (lines[index].split(',').length == 1) {
+                        console.log(lines[index]);
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
 
                         if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);
@@ -118,6 +125,8 @@ async function randomize() {
                         tmsCollectionIndex++;
                     }
 
+                    if (isMegastone(itemParams)) megastoneCollection.push(itemParams[1]);
+
                     lines[index] = await itemParams.join(',');
                 }
 
@@ -131,7 +140,7 @@ async function randomize() {
     }
 
 
-    async function randomizeEncountersFile() {
+    async function processEncounters() {
         function isPokemon(values) {
             if (values.length != 1 && isNaN(values[0])) return true; // Pattern to identify pokemon lines 
             else return false;
@@ -160,7 +169,7 @@ async function randomize() {
     }
 
 
-    async function randomizeTrainersFile() {
+    async function processTrainers() {
         return await new Promise(function (resolve) {
 
             function usesCombatItem(pokemonParams) {
@@ -182,7 +191,7 @@ async function randomize() {
                             : await getRandomPokemon(maxEvolvedPokemon);
 
                         if (usesCombatItem(pokemonParams)) {
-                            pokemonParams[2] = await getRandomCombatItem(filePaths.items);
+                            pokemonParams[2] = await getRandomItem(filePaths.items, [7]);
                             lines[index] = lines[index] + ',' + pokemonParams[2];
                         }
                     }
@@ -198,10 +207,10 @@ async function randomize() {
     }
 
 
-    await randomizePokemonFile();
-    await randomizeTmsFile();
-    await randomizeEncountersFile();
-    await randomizeTrainersFile();
+    await processPokemon();
+    await processItems();
+    await processEncounters();
+    await processTrainers();
 }
 
 randomize();

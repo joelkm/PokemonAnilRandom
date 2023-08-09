@@ -1,5 +1,7 @@
 const nthline = require('nthline');
 
+let bannedAbilities = ['WONDERGUARD'];
+
 function getRandomIntervalNumber(min, max) {
     return Math.floor((Math.random() * (max - min + 1) + min));
 }
@@ -17,22 +19,26 @@ module.exports = {
         return values[1];
     },
     getRandomAbility: async function (filePath, firstLine = 0, lastLine = 204) {
-        const randomLine = getRandomIntervalNumber(firstLine, lastLine);
-        const line = await nthline(randomLine, filePath);
-        return line.split(',')[1];
+        let line, values;
+        do {
+            const randomLine = getRandomIntervalNumber(firstLine, lastLine);
+            line = await nthline(randomLine, filePath);
+            ability = line.split(',')[1];
+        } while (bannedAbilities.includes(ability));
+        return ability
     },
     getRandomPokemon: async function (pokemon) {
         const randomPokemonNumber = getRandomIntervalNumber(0, pokemon.length - 1)
         return pokemon[randomPokemonNumber];
     },
-    getRandomCombatItem: async function (filePath, firstLine = 0, lastLine = 688) {
+    getRandomItem: async function (filePath, itemFlags = [1, 2, 3, 5, 6, 7], firstLine = 0, lastLine = 688) {
         let line;
         let itemParams;
         do {
             const randomLine = getRandomIntervalNumber(firstLine, lastLine);
             line = await nthline(randomLine, filePath);
             itemParams = line.split(',');
-        } while (itemParams[4] != 7); // Item is not identified as "Combat"
+        } while (!itemFlags.includes(itemParams[4])); // Item is not identified as "Combat"
 
         return itemParams[1];
     }
