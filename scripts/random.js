@@ -9,7 +9,8 @@ async function randomize() {
     let pokemonCollection = []; // Filled in processPokemonFile(), used in processItemsFile()
     let maxEvolvedPokemon = [];
     let megastoneCollection = [];
-    let megapokemonCollection = []
+    let megaPokemon = []
+    let megaMap = new Map()
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
         if (line.includes('#') || !line.split('/r')[0]) return true;
@@ -95,6 +96,10 @@ async function randomize() {
             else return false
         }
 
+        function getMegastoneUser(itemParams) {
+            return itemParams[6].split(' a ')[1].split('.')[0].toUpperCase();
+        }
+
         let tmsCollection = []; // This is used to bind the TM data to the in-game items
 
         await new Promise(function (resolve) {
@@ -140,7 +145,18 @@ async function randomize() {
                         tmsCollectionIndex++;
                     }
 
-                    if (isMegastone(itemParams)) megastoneCollection.push(itemParams[1]);
+                    if (isMegastone(itemParams)) {
+                        let indexOfMegastone = megastoneCollection.push(itemParams[1]) - 1;
+                        let megastoneUser = getMegastoneUser(itemParams);
+
+                        megaPokemon.push(megastoneUser);
+                        megaMap.set(megastoneUser, indexOfMegastone)
+
+                        if (megastoneUser == 'FLAPPLE') {
+                            megaPokemon.push('APPLETUN')
+                            megaMap.set('APPLETUN', indexOfMegastone);
+                        }
+                    }
 
                     if (isCaptureBall(itemParams)) {
                         switch (itemParams[1]) {
