@@ -86,8 +86,13 @@ async function randomize() {
         }
 
         function isMegastone(itemParams) {
-            if (itemParams[4] == 6 && !itemParams[2].split(' ').includes('Carta')) return true; // Megastones are flagged as "mail items", we discard these with the second condition
+            if (itemParams[4] == 6 && !itemParams[2].includes('Carta')) return true; // Megastones are flagged as "mail items", we discard these with the second condition
             else return false;
+        }
+
+        function isCaptureBall(itemParams) {
+            if (itemParams[4] == 3) return true;
+            else return false
         }
 
         let tmsCollection = []; // This is used to bind the TM data to the in-game items
@@ -136,6 +141,25 @@ async function randomize() {
                     }
 
                     if (isMegastone(itemParams)) megastoneCollection.push(itemParams[1]);
+
+                    if (isCaptureBall(itemParams)) {
+                        switch (itemParams[1]) {
+                            case 'POKEBALL':
+                                itemParams[5] = 200;
+                                break;
+                            case 'GREATBALL':
+                                itemParams[5] = 800;
+                                break;
+                            case 'ULTRABALL':
+                                itemParams[5] = 1500;
+                                break;
+                            case 'MASTERBALL':
+                                break;
+                            default:
+                                itemParams[5] = 2500;
+                                break;
+                        }
+                    }
 
                     lines[index] = await itemParams.join(',');
                 }
