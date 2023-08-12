@@ -106,7 +106,7 @@ async function randomize() {
 
             fs.readFile(filePaths.tms, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
-                const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE'];
+                const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE', 'METRONOME'];
                 // Essential tms that we shouldn't modify
 
                 for (let index = 0; index < lines.length; index++) {
