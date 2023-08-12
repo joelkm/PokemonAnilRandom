@@ -41,5 +41,6 @@ module.exports = {
         } while (!itemFlags.includes(itemParams[4]) && !itemParams[2].split(' ').includes('Carta')); // Item is doesn't belong to the flagged items and is not a mail card
 
         return itemParams[1];
-    }
+    },
+    getRandomMegastone
 }

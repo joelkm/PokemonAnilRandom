@@ -241,7 +241,12 @@ async function randomize() {
                             : await getRandomPokemon(maxEvolvedPokemon);
 
                         if (usesCombatItem(pokemonParams)) {
-                            pokemonParams[2] = await getRandomItem(filePaths.items, [7]);
+                            if (megastoneCollection.includes(pokemonParams[2])) {
+                                pokemonParams[0] = await getRandomPokemon(megaPokemon)
+                                pokemonParams[2] = megastoneCollection[megaMap.get(pokemonParams[0])];
+                            } else {
+                                pokemonParams[2] = await getRandomItem(filePaths.items, [7]);
+                            }
                             lines[index] = lines[index] + ',' + pokemonParams[2];
                         }
                     }
