@@ -7,7 +7,7 @@ function getRandomIntervalNumber(min, max) {
 }
 
 module.exports = {
-    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 648) {
+    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 650) {
         let line;
         let values;
         do {
