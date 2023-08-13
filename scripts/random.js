@@ -41,7 +41,7 @@ async function randomize() {
                                 lines[index] = property + '=' + await buildLvlMoveSet(learningLevels);
                                 break;
                             case 'EggMoves':
-                                const eggMoves = values.split(',');
+                                let eggMoves = values;
                                 lines[index] = property + '=' + await buildEggMoveSet(eggMoves);
                                 break;
                             case 'Abilities':
@@ -57,7 +57,7 @@ async function randomize() {
                                 pokemonCollection.push(values[0].split('\r')[0]); // Will come handy when randomizing TMs
                                 break;
                             case 'Evolutions':
-                                if (!value) {
+                                if (!values) {
                                     maxEvolvedPokemon.push(pokemonCollection[pokemonCollection.length - 1]);
                                 }
                                 break;
@@ -112,7 +112,6 @@ async function randomize() {
                     if (isCommentLine(lines[index])) continue;
 
                     if (lines[index].split(',').length == 1) {
-                        console.log(lines[index]);
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
 
                         if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);
@@ -235,7 +234,7 @@ async function randomize() {
                         }
                     } else {
                         let pokemonParams = lines[index].split(',');
-                        pokemonParams[0](pokemonParams[1] < 36)
+                        pokemonParams[0] = (pokemonParams[1] < 36)
                             ? await getRandomPokemon(pokemonCollection)
                             : await getRandomPokemon(maxEvolvedPokemon);
 

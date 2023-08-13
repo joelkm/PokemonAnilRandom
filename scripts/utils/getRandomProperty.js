@@ -7,14 +7,18 @@ function getRandomIntervalNumber(min, max) {
 }
 
 module.exports = {
-    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 643) {
+    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 648) {
         let line;
         let values;
         do {
-            const randomLine = getRandomIntervalNumber(firstLine, lastLine);
-            line = await nthline(randomLine, filePath);
-            values = line.split(',');
-        } while (hitMoveIsMandatory && values[6] == "Status");
+            try {
+                const randomLine = getRandomIntervalNumber(firstLine, lastLine);
+                line = await nthline(randomLine, filePath);
+                values = line.split(',');
+            } catch (error) {
+                lastLine = 643;
+            }
+        } while (!line || hitMoveIsMandatory && values[6] == "Status");
 
         return values[1];
     },
@@ -41,6 +45,5 @@ module.exports = {
         } while (!itemFlags.includes(itemParams[4]) && !itemParams[2].split(' ').includes('Carta')); // Item is doesn't belong to the flagged items and is not a mail card
 
         return itemParams[1];
-    },
-    getRandomMegastone
+    }
 }
