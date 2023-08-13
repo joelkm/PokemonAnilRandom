@@ -38,12 +38,7 @@ async function gen9Update() {
         })
     }
 
-    async function updateLearning() {
-
-
-    }
 
     await updateMoves();
-    await updateLearning();
-
-    gen9Update();
+}
+gen9Update();
