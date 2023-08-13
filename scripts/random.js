@@ -94,7 +94,7 @@ async function randomize() {
         }
 
         function getMegastoneUser(itemParams) {
-            return itemParams[6].split(' a ')[1].split('.')[0].toUpperCase();
+            return itemParams[6].split(' a ')[1].split('.')[0].toUpperCase().split(' y ')[0];
         }
 
         let tmsCollection = []; // This is used to bind the TM data to the in-game items
@@ -142,15 +142,18 @@ async function randomize() {
                     }
 
                     if (isMegastone(itemParams)) {
-                        let indexOfMegastone = megastoneCollection.push(itemParams[1]) - 1;
                         let megastoneUser = getMegastoneUser(itemParams);
+                        if (pokemonCollection.includes(megastoneUser)) {
 
-                        megaPokemon.push(megastoneUser);
-                        megaMap.set(megastoneUser, indexOfMegastone)
+                            let indexOfMegastone = megastoneCollection.push(itemParams[1]) - 1;
 
-                        if (megastoneUser == 'FLAPPLE') {
-                            megaPokemon.push('APPLETUN')
-                            megaMap.set('APPLETUN', indexOfMegastone);
+                            megaPokemon.push(megastoneUser);
+                            megaMap.set(megastoneUser, indexOfMegastone)
+
+                            if (megastoneUser == 'FLAPPLE') {
+                                megaPokemon.push('APPLETUN')
+                                megaMap.set('APPLETUN', indexOfMegastone);
+                            }
                         }
                     }
 
