@@ -2,7 +2,6 @@ const fs = require('fs');
 const { getRandomMove, getRandomPokemon, getRandomItem } = require('./utils/getRandomProperty');
 const { buildLvlMoveSet, buildEggMoveSet, buildAbilitySet, buildTmLearnerList } = require('./utils/valueBuilders');
 const filePaths = require('./utils/fileHandler');
-const { log } = require('console');
 
 async function randomize() {
 
