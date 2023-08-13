@@ -18,7 +18,6 @@ async function randomize() {
 
 
     async function processPokemon() {
-
         function getLearningLevels(values) {
             return values.filter(function (element) {
                 if (!isNaN(parseInt(element))) return element;
@@ -31,7 +30,6 @@ async function randomize() {
                 for (let index = 0; index < lines.length; index++) {
                     const splitedLineByEqual = lines[index].split('=');
                     const property = splitedLineByEqual[0];
-
                     if (splitedLineByEqual[1]) {
                         const values = splitedLineByEqual[1].split(',');
                         switch (property) {
@@ -57,7 +55,7 @@ async function randomize() {
                                 pokemonCollection.push(values[0].split('\r')[0]); // Will come handy when randomizing TMs
                                 break;
                             case 'Evolutions':
-                                if (!values) {
+                                if (values[0] == '\r') {
                                     maxEvolvedPokemon.push(pokemonCollection[pokemonCollection.length - 1]);
                                 }
                                 break;
@@ -243,10 +241,12 @@ async function randomize() {
                                 pokemonParams[0] = await getRandomPokemon(megaPokemon)
                                 pokemonParams[2] = megastoneCollection[megaMap.get(pokemonParams[0])];
                             } else {
-                                pokemonParams[2] = await getRandomItem(filePaths.items, [7]);
+                                pokemonParams[2] = await getRandomItem(filePaths.items, ['7']);
                             }
-                            lines[index] = lines[index] + ',' + pokemonParams[2];
                         }
+
+                        lines[index] = pokemonParams[0] + ',' + pokemonParams[1];
+                        if (pokemonParams[2]) lines[index] = lines[index] + ',' + pokemonParams[2];
                     }
                 }
 
