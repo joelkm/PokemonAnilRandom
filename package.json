@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "randomize": "node scripts/random.js",
     "gen9-update": "node scripts/gen9-moves.js",
-    "include-gen9-moves": "node scripts/gen9-moves.js"
+    "modpack": "npm install &&npm run gen9-update &&npm run randomize"
   },
   "keywords": [],
   "author": "",

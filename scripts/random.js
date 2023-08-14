@@ -12,7 +12,7 @@ async function randomize() {
     let megaMap = new Map()
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
-        if (line.includes('#') || !line.split('/r')[0]) return true;
+        if (line.includes('#') || !line.split('\r')[0]) return true;
         else return false;
     }
 
@@ -26,7 +26,7 @@ async function randomize() {
 
         return await new Promise(function (resolve) {
             fs.readFile(filePaths.pokemon, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 for (let index = 0; index < lines.length; index++) {
                     const splitedLineByEqual = lines[index].split('=');
                     const property = splitedLineByEqual[0];
@@ -65,7 +65,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function () { })
 
                 console.log('Pokemon: Randomizados con exito');
@@ -102,7 +102,7 @@ async function randomize() {
         await new Promise(function (resolve) {
 
             fs.readFile(filePaths.tms, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE', 'METRONOME'];
                 // Essential tms that we shouldn't modify
 
@@ -121,7 +121,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.tms, resultFile, 'utf-8', function () { });
 
                 console.log('Datos de MTs: Randomizados con exito')
@@ -131,7 +131,7 @@ async function randomize() {
         await new Promise(function (resolve) {
 
             fs.readFile(filePaths.items, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 let tmsCollectionIndex = 0;
                 for (let index = 0; index < lines.length; index++) {
                     let itemParams = lines[index].split(',');
@@ -179,7 +179,7 @@ async function randomize() {
                     lines[index] = await itemParams.join(',');
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.items, resultFile, 'utf-8', function () { });
 
                 console.log('Objetos MT: Enlazados con exito');
@@ -198,7 +198,7 @@ async function randomize() {
         return await new Promise(function (resolve) {
 
             fs.readFile(filePaths.encounters, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 for (let index = 0; index < lines.length; index++) {
                     let values = lines[index].split(',');
 
@@ -208,7 +208,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function () { });
 
                 console.log('Encuentros: Randomizado con exito');
@@ -227,7 +227,7 @@ async function randomize() {
             }
 
             fs.readFile(filePaths.trainers, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 for (let index = 0; index < lines.length; index++) {
                     if (isCommentLine(lines[index])) {
                         if (!isCommentLine(lines[index + 1])) { // Detects that the next line corresponds to the trainer name, so it skips to the next pokemon
@@ -253,7 +253,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function () { });
 
                 console.log('Randomizado con exito: Entrenadores')
