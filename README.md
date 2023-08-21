@@ -20,15 +20,22 @@ Vamos al lío.
 #### Preparación
 
 1. Instala Node.js: Es el motor de ejecución de los scripts, para descargarlo e instalarlo puedes seguir este [tutorial](https://www.youtube.com/watch?v=0Tdjselvxq0&ab_channel=TareaCompleto)
-2. Configura Node.js: Declarar variables de entorno para ejecución. En resumen, hacer [sigue estas instrucciones](https://bertofern.wordpress.com/2019/01/08/solucion-node-js-npm-no-reconocido-como-comando-interno-o-externo/)
+2. Configura Node.js: Declarar variables de entorno para ejecución. En resumen, [sigue estas instrucciones](https://bertofern.wordpress.com/2019/01/08/solucion-node-js-npm-no-reconocido-como-comando-interno-o-externo/)
 3. Descarga el .zip del Modpack, lo puedes encontrar [aquí]()
 
-En este punto ya esta todo listo para randomizar el juego. Sigue los siguientes pasos cada vez que quieras randomizar una run nueva. OJO: Si quieres un nuevo save
+En este punto ya esta todo listo para randomizar el juego. Sigue los pasos a partir de aqui cada vez que quieras randomizar una run nueva. OJO: Si quieres hacer una nueva run, deberas repetir el proceso (punto 4 en adelante) en una nueva carpeta copia del juego original.
 
-4. Mueve el archivo a la carpeta del Pokémon Añil y descomprimelo. Quedará algo asi
+4. Mueve el archivo a la carpeta del Pokémon Añil y descomprimelo. Quedará algo así
   img///
-5. Renombra la carpeta a algo corto como "Custom". Resultado:
-   img///
+5. Renombra la carpeta a algo corto como "Custom"
+6. Abre la terminal de comandos de tu pc y ubicate en la carpeta "Custom" dentro de la carpeta del juego
+7. Escribe
+> `npm run randomize`
+y espera a que acabe el proceso. Una vez acabado puedes cerrar la terminal.
+8. Entra en la carpeta "Custom" y mueve el archivo "Game.rxproj" a la carpeta del juego y abrelo. Se te abrirá RPGMaker y verás una pantalla como esta:
+9. Da click en el triángulo verde del menú. Se abrira una nueva pestaña en negro, presiona repetidamente la tecla Ctrl hasta que cambie el nombre de la pestaña a algo como "Compilando" o "Procesando datos de ..." y espera. El nombre de la pestaña irá cambiando repetidamente hasta que finalice el proceso. Una vez completado se abrirá el juego automáticamente con todo randomizado.
+
+
 
 
 
