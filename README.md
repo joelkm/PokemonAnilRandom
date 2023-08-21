@@ -61,7 +61,7 @@ En este punto ya esta todo listo para randomizar el juego. Sigue los pasos a par
 6. Abre la terminal de comandos de tu pc y ubicate en la carpeta "Custom" dentro de la carpeta del juego. Puedes abrir la terminal buscando "Terminal" en la barra de busqueda de la tecla Windows. Aquí tienes un video sobre [como navegar a una carpeta en la terminal](https://www.youtube.com/watch?v=OEhp7WJJKzs&ab_channel=YoAndroide) Suponiendo que tengamos el juego en la carpeta de Descargas, por ejemplo, deberiamos escribir algo como `cd Descargas/PokemonAnil/Custom`.
 7. A continuación, escribe el comando
 `npm run randomize`
-y espera a que acabe el proceso. Esto ejecutará los scripts que modifican los archivos del juego. Una vez acabado puedes cerrar la terminal.
+y espera a que acabe el proceso. Esto ejecutará los scripts que modifican los archivos del juego. Una vez leas "Juego randomizado con éxito", el proceso habrá acabado y podrás cerrar la terminal.
 8. Entra en la carpeta "Custom" y mueve el archivo "Game.rxproj" a la carpeta del juego y abre dicho archivo. Se abrirá RPGMaker y tendrás delante una pantalla como esta:
 ![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/a3fff0d9-ccd4-42bd-86a5-e6fddde2577b)
 9. Da click en el triángulo verde del menú.
