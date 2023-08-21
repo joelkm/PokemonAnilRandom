@@ -267,6 +267,7 @@ async function randomize() {
     await processItems();
     await processEncounters();
     await processTrainers();
+    console.log("Juego randomizado con éxito");
 }
 
 randomize();
