@@ -49,7 +49,7 @@ Vamos al lío.
 
 1. Instala Node.js: Es el motor de ejecución de los scripts, para descargarlo e instalarlo puedes seguir este [tutorial](https://www.youtube.com/watch?v=0Tdjselvxq0&ab_channel=TareaCompleto)
 2. Configura Node.js: Declarar variables de entorno para ejecución. En resumen, [sigue estas instrucciones](https://bertofern.wordpress.com/2019/01/08/solucion-node-js-npm-no-reconocido-como-comando-interno-o-externo/)
-3. Descarga el .zip del Modpack, lo puedes encontrar [aquí]()
+3. Descarga el .zip del Modpack, lo puedes encontrar [aquí](https://www.mediafire.com/file/h3nxl2qarx7hg6i/PokemonAnilModpack-master.zip/file)
 
 #### Randomizar
 
