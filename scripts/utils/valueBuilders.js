@@ -7,7 +7,12 @@ module.exports = {
         let mandatoryHitMove = true;
 
         for (let index = 0; index < learningLevels.length; index++) {
-            newValues = newValues + learningLevels[index] + ',' + await getRandomMove(filePaths.moves, mandatoryHitMove) + ',';
+            let newMove;
+            do {
+                newMove = await getRandomMove(filePaths.moves, mandatoryHitMove);
+            } while (newValues.includes(newMove));
+
+            newValues = newValues + learningLevels[index] + ',' + newMove + ',';
             if (index == 0) mandatoryHitMove = false;
         }
 
@@ -19,7 +24,12 @@ module.exports = {
         let newValues = '';
 
         for (let index = 0; index < eggMoves.length; index++) {
-            newValues = newValues + await getRandomMove(filePaths.moves) + ',';
+            let newMove;
+            do {
+                newMove = await getRandomMove(filePaths.moves);
+            } while (newValues.includes(newMove));
+
+            newValues = newValues + newMove + ',';
         }
 
         newValues = newValues.slice(0, -1);
@@ -30,7 +40,12 @@ module.exports = {
         let newValues = '';
 
         for (let index = 0; index < values.length; index++) {
-            newValues = newValues + await getRandomAbility(filePaths.abilities) + ',';
+            let newAbility;
+            do {
+                newAbility = await getRandomAbility(filePaths.abilities);
+            } while (newValues.includes(newAbility));
+
+            newValues = newValues + newAbility + ',';
         }
         newValues = newValues.slice(0, -1);
 
