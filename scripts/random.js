@@ -12,13 +12,12 @@ async function randomize() {
     let megaMap = new Map()
 
     function isCommentLine(line) { // Useful to detect comment lines in any file
-        if (line.includes('#') || !line.split('/r')[0]) return true;
+        if (line.includes('#') || !line.split('\r')[0]) return true;
         else return false;
     }
 
 
     async function processPokemon() {
-
         function getLearningLevels(values) {
             return values.filter(function (element) {
                 if (!isNaN(parseInt(element))) return element;
@@ -27,11 +26,10 @@ async function randomize() {
 
         return await new Promise(function (resolve) {
             fs.readFile(filePaths.pokemon, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 for (let index = 0; index < lines.length; index++) {
                     const splitedLineByEqual = lines[index].split('=');
                     const property = splitedLineByEqual[0];
-
                     if (splitedLineByEqual[1]) {
                         const values = splitedLineByEqual[1].split(',');
                         switch (property) {
@@ -41,7 +39,7 @@ async function randomize() {
                                 lines[index] = property + '=' + await buildLvlMoveSet(learningLevels);
                                 break;
                             case 'EggMoves':
-                                const eggMoves = values.split(',');
+                                let eggMoves = values;
                                 lines[index] = property + '=' + await buildEggMoveSet(eggMoves);
                                 break;
                             case 'Abilities':
@@ -57,7 +55,7 @@ async function randomize() {
                                 pokemonCollection.push(values[0].split('\r')[0]); // Will come handy when randomizing TMs
                                 break;
                             case 'Evolutions':
-                                if (!value) {
+                                if (values[0] == '\r') {
                                     maxEvolvedPokemon.push(pokemonCollection[pokemonCollection.length - 1]);
                                 }
                                 break;
@@ -67,7 +65,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.pokemon, resultFile, 'utf-8', function () { })
 
                 console.log('Pokemon: Randomizados con exito');
@@ -96,7 +94,7 @@ async function randomize() {
         }
 
         function getMegastoneUser(itemParams) {
-            return itemParams[6].split(' a ')[1].split('.')[0].toUpperCase();
+            return itemParams[6].split(' a ')[1].split('.')[0].toUpperCase().split(' y ')[0];
         }
 
         let tmsCollection = []; // This is used to bind the TM data to the in-game items
@@ -104,7 +102,7 @@ async function randomize() {
         await new Promise(function (resolve) {
 
             fs.readFile(filePaths.tms, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE', 'METRONOME'];
                 // Essential tms that we shouldn't modify
 
@@ -112,7 +110,6 @@ async function randomize() {
                     if (isCommentLine(lines[index])) continue;
 
                     if (lines[index].split(',').length == 1) {
-                        console.log(lines[index]);
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
 
                         if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);
@@ -124,7 +121,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.tms, resultFile, 'utf-8', function () { });
 
                 console.log('Datos de MTs: Randomizados con exito')
@@ -134,7 +131,7 @@ async function randomize() {
         await new Promise(function (resolve) {
 
             fs.readFile(filePaths.items, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 let tmsCollectionIndex = 0;
                 for (let index = 0; index < lines.length; index++) {
                     let itemParams = lines[index].split(',');
@@ -145,15 +142,18 @@ async function randomize() {
                     }
 
                     if (isMegastone(itemParams)) {
-                        let indexOfMegastone = megastoneCollection.push(itemParams[1]) - 1;
                         let megastoneUser = getMegastoneUser(itemParams);
+                        if (pokemonCollection.includes(megastoneUser)) {
 
-                        megaPokemon.push(megastoneUser);
-                        megaMap.set(megastoneUser, indexOfMegastone)
+                            let indexOfMegastone = megastoneCollection.push(itemParams[1]) - 1;
 
-                        if (megastoneUser == 'FLAPPLE') {
-                            megaPokemon.push('APPLETUN')
-                            megaMap.set('APPLETUN', indexOfMegastone);
+                            megaPokemon.push(megastoneUser);
+                            megaMap.set(megastoneUser, indexOfMegastone)
+
+                            if (megastoneUser == 'FLAPPLE') {
+                                megaPokemon.push('APPLETUN')
+                                megaMap.set('APPLETUN', indexOfMegastone);
+                            }
                         }
                     }
 
@@ -179,7 +179,7 @@ async function randomize() {
                     lines[index] = await itemParams.join(',');
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.items, resultFile, 'utf-8', function () { });
 
                 console.log('Objetos MT: Enlazados con exito');
@@ -198,7 +198,7 @@ async function randomize() {
         return await new Promise(function (resolve) {
 
             fs.readFile(filePaths.encounters, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 for (let index = 0; index < lines.length; index++) {
                     let values = lines[index].split(',');
 
@@ -208,7 +208,7 @@ async function randomize() {
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.encounters, resultFile, 'utf-8', function () { });
 
                 console.log('Encuentros: Randomizado con exito');
@@ -227,7 +227,7 @@ async function randomize() {
             }
 
             fs.readFile(filePaths.trainers, 'utf-8', async function (err, data) {
-                let lines = await data.split('\n');
+                let lines = await data.split('\r');
                 for (let index = 0; index < lines.length; index++) {
                     if (isCommentLine(lines[index])) {
                         if (!isCommentLine(lines[index + 1])) { // Detects that the next line corresponds to the trainer name, so it skips to the next pokemon
@@ -235,7 +235,7 @@ async function randomize() {
                         }
                     } else {
                         let pokemonParams = lines[index].split(',');
-                        pokemonParams[0](pokemonParams[1] < 36)
+                        pokemonParams[0] = (pokemonParams[1] < 36)
                             ? await getRandomPokemon(pokemonCollection)
                             : await getRandomPokemon(maxEvolvedPokemon);
 
@@ -244,14 +244,16 @@ async function randomize() {
                                 pokemonParams[0] = await getRandomPokemon(megaPokemon)
                                 pokemonParams[2] = megastoneCollection[megaMap.get(pokemonParams[0])];
                             } else {
-                                pokemonParams[2] = await getRandomItem(filePaths.items, [7]);
+                                pokemonParams[2] = await getRandomItem(filePaths.items, ['7']);
                             }
-                            lines[index] = lines[index] + ',' + pokemonParams[2];
                         }
+
+                        lines[index] = pokemonParams[0] + ',' + pokemonParams[1];
+                        if (pokemonParams[2]) lines[index] = lines[index] + ',' + pokemonParams[2];
                     }
                 }
 
-                const resultFile = await lines.join('\n');
+                const resultFile = await lines.join('\r');
                 await fs.writeFile(filePaths.trainers, resultFile, 'utf-8', function () { });
 
                 console.log('Randomizado con exito: Entrenadores')
