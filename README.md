@@ -1,4 +1,4 @@
-# Pokemon Anil Modpack
+# Pokemon Anil Random
 
 This mod pack is not available for the English version yet, this is the tutorial for the Spanish version. To see an explanation on all of this and how I did it, click [here](/Explanation).
 
