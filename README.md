@@ -63,8 +63,8 @@ OJO: Los datos de cada run se guardan en la propia carpeta del juego, por lo que
 
 #### Randomizar
 
-5. Abre la carpeta del juego que has descomprimido en el paso 2 (PokemonAnilRandom). Hay 2 elementos nuevos que no están en el juego original: una carpeta llamada "Custom" y un archivo llamado "Game.rxproj".
-![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/ce115dfc-ab56-4208-9180-831784965595)
+5. Abre la carpeta del juego que has descomprimido en el paso 2 (PokemonAnilRandom). Hay 2 elementos nuevos que no están en el juego original: una carpeta llamada "Custom" y un archivo llamado "Game.rxproj".  
+![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/ce115dfc-ab56-4208-9180-831784965595)  
 6. Abre la terminal de comandos de tu pc y y usa el comando `cd` para ubicarte en la carpeta "Custom" dentro de la carpeta del juego.
 Algunos no estaréis familiarizados con el uso de la terminal asi que vamos a cubrirlo brevemente.
 - Puedes abrir la terminal buscando "Terminal" en la barra de busqueda de la tecla Windows.
@@ -73,11 +73,11 @@ Algunos no estaréis familiarizados con el uso de la terminal asi que vamos a cu
 `npm run randomize`
 y espera a que acabe el proceso. Esto ejecutará los scripts que modifican los archivos del juego. Una vez leas "Juego randomizado con éxito", el proceso habrá acabado y podrás cerrar la terminal.
 8. Abre el archivo "Game.rxproj". Se abrirá RPGMaker y tendrás delante una pantalla como esta:  
-![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/a3fff0d9-ccd4-42bd-86a5-e6fddde2577b)
+![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/a3fff0d9-ccd4-42bd-86a5-e6fddde2577b)  
 9. Da click en el triángulo verde del menú:  
-![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/b3d0d0be-ec3e-4b79-a300-74da60add3be)
+![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/b3d0d0be-ec3e-4b79-a300-74da60add3be)  
 Se abrira una nueva pestaña en negro, presiona repetidamente la tecla Ctrl hasta que cambie el nombre de la pestaña a algo como "Compilando" o "Procesando datos de ..." y espera.  
-![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/0cd9a957-7495-40ea-b24c-ebeef90996af)
+![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/0cd9a957-7495-40ea-b24c-ebeef90996af)  
 Esto lo que hace es recompilar los datos del juego que ya hemos randomizado con los scripts.
 El nombre de la pestaña irá cambiando repetidamente hasta que finalice el proceso. Una vez completado se abrirá el juego automáticamente con todo randomizado.
 
