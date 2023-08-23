@@ -72,11 +72,11 @@ Algunos no estaréis familiarizados con el uso de la terminal asi que vamos a cu
 7. Una vez ubicado en la carpeta "Custom", escribe el comando
 `npm run randomize`
 y espera a que acabe el proceso. Esto ejecutará los scripts que modifican los archivos del juego. Una vez leas "Juego randomizado con éxito", el proceso habrá acabado y podrás cerrar la terminal.
-8. Abre el archivo "Game.rxproj". Se abrirá RPGMaker y tendrás delante una pantalla como esta:
+8. Abre el archivo "Game.rxproj". Se abrirá RPGMaker y tendrás delante una pantalla como esta:  
 ![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/a3fff0d9-ccd4-42bd-86a5-e6fddde2577b)
-9. Da click en el triángulo verde del menú:
+9. Da click en el triángulo verde del menú:  
 ![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/b3d0d0be-ec3e-4b79-a300-74da60add3be)
-Se abrira una nueva pestaña en negro, presiona repetidamente la tecla Ctrl hasta que cambie el nombre de la pestaña a algo como "Compilando" o "Procesando datos de ..." y espera.
+Se abrira una nueva pestaña en negro, presiona repetidamente la tecla Ctrl hasta que cambie el nombre de la pestaña a algo como "Compilando" o "Procesando datos de ..." y espera.  
 ![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/0cd9a957-7495-40ea-b24c-ebeef90996af)
 Esto lo que hace es recompilar los datos del juego que ya hemos randomizado con los scripts.
 El nombre de la pestaña irá cambiando repetidamente hasta que finalice el proceso. Una vez completado se abrirá el juego automáticamente con todo randomizado.
