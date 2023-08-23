@@ -16,6 +16,7 @@ Sí randomiza:
 - Items de combate en Pokemon de entrenadores
 - Megas de entrenadores
 - MTs
+- Recordadores de movimientos
 
 No randomiza:
 - La elección del starter :(
@@ -40,7 +41,6 @@ Vamos al lío.
 ### Prerrequisitos
 
 - Windows (cualquier versión)
-- Pokémon Añil (Recomendo hacer una copia de la carpeta del juego original y hacer todas las operaciones ahí, de esta forma conservaras el juego original sin randomizar).
 - RPGMakerXP (Es con lo que Eric hace los juegos. No hay que hacer nada complicado, pero se necesita para el paso final. Puedes encontrar steam keys en Google por $4, y, aunque no soy fan de la piratería, seguro que también lo puedes encontrar gratis en algún sitio).
 - Node.js (Motor de ejecución, explicación en el apartado de "Preparación")
 - Las suficientes ganas de jugar un Random como para fíarte de un desconocido en internet.
@@ -49,11 +49,13 @@ Vamos al lío.
 
 1. Instala Node.js: Es el motor de ejecución de los scripts, para descargarlo e instalarlo puedes seguir este [tutorial](https://www.youtube.com/watch?v=0Tdjselvxq0&ab_channel=TareaCompleto)
 2. Configura Node.js: Declarar variables de entorno para ejecución. En resumen, [sigue estas instrucciones](https://bertofern.wordpress.com/2019/01/08/solucion-node-js-npm-no-reconocido-como-comando-interno-o-externo/)
-3. Descarga el .zip del Modpack, lo puedes encontrar [aquí](https://www.mediafire.com/file/h3nxl2qarx7hg6i/PokemonAnilModpack-master.zip/file)
+3. Descarga el Pokemon Añil Random, lo puedes encontrar [aquí](https://www.mediafire.com/file/ou1dmclcvnnzhmv/PokemonAnilRandom.rar/file)
 
 #### Randomizar
 
-En este punto ya esta todo listo para randomizar el juego. Sigue los pasos a partir de aqui cada vez que quieras randomizar una run nueva. OJO: Si quieres hacer una nueva run, deberas repetir el proceso (punto 4 en adelante) en una nueva carpeta copia del juego original.
+Lo que te acabas de descargar es el Pokemon Añil con todo lo necesario para randomizar. Cada vez que quieras comenzar una run nueva, deberas repetir el proceso a partir de aquí. La run del juego que acabas descargar ya está randomizada por defecto, podrías empezar a jugar directamente, pero te recomiendo que lo randomices para tener tu propia run única. 
+
+OJO: Los datos de cada run se guardan en la propia carpeta del juego, por lo que si quieres jugar varias runs diferentes a la vez, deberas hacerlo todo en carpetas diferentes para no cargarte tus runs.
 
 4. Mueve el archivo a la carpeta del Pokémon Añil y descomprimelo. Tendras esta carpeta nueva:
 ![image](https://github.com/joelkm/PokemonAnilModpack/assets/109240974/03410ac8-05d8-4c69-981d-238b9d7cdf92)
