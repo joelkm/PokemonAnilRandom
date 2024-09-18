@@ -81,9 +81,12 @@ async function randomize() {
             else return false;
 
         }
-
+        
         function isMegastone(itemParams) {
-            if (itemParams[4] == 6 && !itemParams[2].includes('Carta')) return true; // Megastones are flagged as "mail items", we discard these with the second condition
+            if (itemParams[1] == 'ASTREMITA') return false;
+            if (itemParams[4] == 1 
+                && (itemParams[1].includes('ITA') || itemParams[2].includes('ITE')
+            )) return true; // Megastones are flagged as "mail items", we discard these with the second condition
             else return false;
         }
 
@@ -102,14 +105,13 @@ async function randomize() {
 
             fs.readFile(filePaths.tms, 'utf-8', async function (err, data) {
                 let lines = await data.split('\n');
-                const mohs = ['SURF', 'STRENGTH', 'ROCKCLIMB', 'CUT', 'ROCKSMASH', 'WATERFALL', 'FLY', 'DIVE', 'METRONOME'];
+                const mohs = ['CUT', 'FLY', 'SURF', 'STRENGTH', 'WATERFALL', 'DIVE', 'METRONOME'];
                 // Essential tms that we shouldn't modify
 
                 for (let index = 0; index < lines.length; index++) {
                     if (isCommentLine(lines[index])) continue;
 
                     if (lines[index].split(',').length == 1) {
-                        console.log(lines[index]);
                         let tmMove = await lines[index].split('[')[1].split(']')[0];
 
                         if (!mohs.includes(tmMove)) tmMove = await getRandomMove(filePaths.moves);

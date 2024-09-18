@@ -7,7 +7,7 @@ function getRandomIntervalNumber(min, max) {
 }
 
 module.exports = {
-    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 650) {
+    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 628) {
         let line;
         let values;
         do {
@@ -22,7 +22,7 @@ module.exports = {
 
         return values[1];
     },
-    getRandomAbility: async function (filePath, firstLine = 0, lastLine = 204) {
+    getRandomAbility: async function (filePath, firstLine = 0, lastLine = 190) {
         let line, values;
         do {
             const randomLine = getRandomIntervalNumber(firstLine, lastLine);
@@ -35,7 +35,7 @@ module.exports = {
         const randomPokemonNumber = getRandomIntervalNumber(0, pokemon.length - 1)
         return pokemon[randomPokemonNumber];
     },
-    getRandomItem: async function (filePath, itemFlags = ['1', '2', '3', '5', '6', '7'], firstLine = 0, lastLine = 688) {
+    getRandomItem: async function (filePath, itemFlags = ['1', '2', '3', '5', '6', '7'], firstLine = 0, lastLine = 657) {
         let line;
         let itemParams;
         do {
