@@ -1,9 +1,14 @@
 # Pokemon Opalo Random
 
-This mod pack is not available for the English version yet, this is the tutorial for the Spanish version. To see an explanation on all of this and how I did it, click [here](/Explanation).
+This mod pack is not available for the English version yet, this is the tutorial for the Spanish version. Srry :(
 
-## Introducción
-Esto más que un mod son un conjunto de scripts que modifican los archivos del juego base de Pokemon Añil. Solo lo hice para un Random locke con mis amigos y no habia pensado en compartirlo, por lo que el proce-so de instalacion es un pelín tedioso. Aún así siguiendo esta guía lo puede disfrutar cualquiera. Hay bastante trabajo detrás y esto lo hago completamente gratis, así que, si quieres recompensarmelo, seguirme en [Twitter](https://twitter.com/JoelMustDeploy) es más que suficiente.
+## Explicación
+Esto más que un mod son un conjunto de scripts que modifican los archivos del juego base de Pokemon Añil. Solo lo hice para un Random locke con mis amigos y no habia pensado en compartirlo, por lo que el proce-so de instalacion es un pelín tedioso. Aún así siguiendo esta guía lo puede disfrutar cualquiera.
+
+## El Porqué
+Lo hice cuando todavía no existía random para el Pokemon Añil y mis amigos y yo queríamos jugarlo.
+
+Aunque ahora, desde la version 2.0 del juego vanilla, el modo Random está disponible, a algunos paladares exquisitos no les acaba el formato y prefieren un random más convencional, así que modifique este script para adherirme a ello.
 
 Hay cosas que se han podido randomizar y otras que no ha habido manera. Un resumen:
 
@@ -11,18 +16,18 @@ Sí randomiza:
 - Habilidades de pokemon
 - Set de movimientos de pokemon (tanto huevo como nivel)
 - Encuentros salvajes
-- Drops de pokemon salvajes (Los que tienen)
+- Drops de pokemon salvajes (Solo en pokemon que tienen drop)
 - Pokemon de entrenadores
 - Items de combate en Pokemon de entrenadores
 - Megas de entrenadores
 - MTs
 - Recordadores de movimientos
+- Habilidades de Pokemon Mega (Porfinnnn, pero para hacerlo hay que hacer mil maravillas, escribidme a twitter)
 
 No randomiza:
-- La elección del starter :(
+- La elección del starter (lo sé, lo siento)
 - Raids
-- Habilidades de Pokemon Mega
-- Items del mundo (Para no cargarme misiones de historia)
+- Items del mundo (Para no cargarnos objetos clave de la historia)
 - Tutores de movimiento
 - Fósiles
 - NPCs de intercambio
@@ -30,7 +35,7 @@ No randomiza:
 Otros detalles:
 - Todos los entrenadored de más de lvl 36 tienen pokemon completamente evolucionados
 - El precio de las balls de captura esta rebalanceado (lo vais a agradecer): Pokeball 200, Greatball 800, Ultraball 1500, Resto 2500.
-- La habilidad Superguarda (Wonderguard) está baneada (para que no se abuse más que otra cosa)
+- Se han baneado varias habilidades (Wonderguard, Moody, Pure power, Disguise) y movimientos (Dragon rage, Spore) que estan demasiado op o simplemente no funcionan
 - He metido algunos movimientos de Gen 9 que no estaban (Fiebre Dorada, Canto ardiente, Truco floral...), desgraciadamente no tienen animaciones originales y algunos efectos están modificados (Ej: Fiebre dorada baja el SpAt 2 veces en lugar de 1 y Martillo Colosal actúa igual que Fuerza Bruta).
 - La MT108 está vacía (No es intencional, la mt original de Metrónomo hace cosas raras y se queda así).
 
@@ -83,10 +88,6 @@ El nombre de la pestaña irá cambiando repetidamente hasta que finalice el proc
 
 A partir de aqui, ya puedes actuar con normalidad. La proxima vez que quieras jugar, ya podras abrir el juego desde "Game.exe" como siempre.
 
-Se que el proceso es complicado y más de uno tendréis alguna duda. Si es así, podéis escribirme a [Twitter](https://twitter.com/JoelMustDeploy).
+Se que el proceso es complicado y más de uno tendrá alguna duda. Si es así, escribeme a [Twitter](https://twitter.com/JoelMustDeploy).
 
-Sentíos libres de compartirlo, streamearlo y disfrutarlo sin obligación ninguna, que para eso está (eso sí, si decís que lo he hecho yo tampoco me quejaré).
-
-¿He dicho ya que tengo [Twitter](https://twitter.com/JoelMustDeploy)?
-
-## Explanation
+Siéntete libres de compartirlo, streamearlo y disfrutarlo sin obligación ninguna, que para eso está (eso sí, si me das crédito no me quejo).
