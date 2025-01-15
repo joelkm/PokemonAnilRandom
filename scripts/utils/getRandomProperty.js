@@ -1,13 +1,14 @@
 const nthline = require('nthline');
 
-let bannedAbilities = ['WONDERGUARD'];
+let bannedAbilities = ['WONDERGUARD', 'MOODY', 'PUREPOWER', 'DISGUISE'];
+let bannedMoves = ['DRAGONRAGE', 'SPORE']
 
 function getRandomIntervalNumber(min, max) {
     return Math.floor((Math.random() * (max - min + 1) + min));
 }
 
 module.exports = {
-    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 628) {
+    getRandomMove: async function (filePath, hitMoveIsMandatory = false, firstLine = 0, lastLine = 650) {
         let line;
         let values;
         do {
@@ -18,11 +19,11 @@ module.exports = {
             } catch (error) {
                 lastLine = 643;
             }
-        } while (!line || hitMoveIsMandatory && values[6] == "Status");
+        } while (!line || hitMoveIsMandatory && values[6] == "Status" || bannedMoves.includes(values[1]));
 
         return values[1];
     },
-    getRandomAbility: async function (filePath, firstLine = 0, lastLine = 190) {
+    getRandomAbility: async function (filePath, firstLine = 0, lastLine = 204) {
         let line, values;
         do {
             const randomLine = getRandomIntervalNumber(firstLine, lastLine);
@@ -35,7 +36,7 @@ module.exports = {
         const randomPokemonNumber = getRandomIntervalNumber(0, pokemon.length - 1)
         return pokemon[randomPokemonNumber];
     },
-    getRandomItem: async function (filePath, itemFlags = ['1', '2', '3', '5', '6', '7'], firstLine = 0, lastLine = 657) {
+    getRandomItem: async function (filePath, itemFlags = ['1', '2', '3', '5', '6', '7'], firstLine = 0, lastLine = 688) {
         let line;
         let itemParams;
         do {
@@ -47,3 +48,4 @@ module.exports = {
         return itemParams[1];
     }
 }
+
